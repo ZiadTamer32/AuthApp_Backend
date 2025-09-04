@@ -3,29 +3,28 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: "./config.env" });
 
-// القيم دي لازم تبقى عندك في env
 const USER = process.env.EMAIL_USERNAME;
 const PASS = process.env.EMAIL_PASSWORD;
 
 if (!USER || !PASS) {
-  throw new Error(
-    "MAILTRAP_USER or MAILTRAP_PASS is missing in environment variables."
-  );
+  throw new Error("USER or PASS is missing in environment variables.");
 }
 
 const transport = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: parseInt(process.env.EMAIL_PORT),
-  secure: process.env.EMAIL_PORT === "465",
+  service: "gmail",
+  secure: true,
   auth: {
-    user: process.env.EMAIL_USERNAME,
-    pass: process.env.EMAIL_PASSWORD,
+    user: USER,
+    pass: PASS,
+  },
+  tls: {
+    rejectUnauthorized: false,
   },
 });
 
 export const sender = {
   name: "My Auth App",
-  address: "no-reply@myapp.com",
+  address: USER,
 };
 
 export async function sendEmail(config) {
