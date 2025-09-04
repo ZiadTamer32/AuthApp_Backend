@@ -15,16 +15,17 @@ if (!USER || !PASS) {
 
 const transport = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
+  port: parseInt(process.env.EMAIL_PORT),
+  secure: process.env.EMAIL_PORT === "465",
   auth: {
-    user: USER,
-    pass: PASS
-  }
+    user: process.env.EMAIL_USERNAME,
+    pass: process.env.EMAIL_PASSWORD,
+  },
 });
 
 export const sender = {
   name: "My Auth App",
-  address: "no-reply@myapp.com"
+  address: "no-reply@myapp.com",
 };
 
 export async function sendEmail(config) {
