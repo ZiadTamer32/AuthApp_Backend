@@ -125,7 +125,11 @@ export async function login(req, res) {
 }
 export async function logout(req, res) {
   try {
-    res.clearCookie("Auth-Token");
+    res.clearCookie("Auth-Token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
+    });
     res.status(200).json({ success: true, message: "Logged out successfully" });
   } catch (error) {
     console.error(error);
